@@ -68,8 +68,8 @@ class SolarRadiation(models.Model):
     )
     state_id = fields.Many2one(
         'res.country.state', 
-        string='Province/State', 
-        required=True
+        string='Province/State', help="Province or state where the solar radiation is measured"
+        #required=True
     )
     city = fields.Char(string='City', required=True)
     
@@ -173,6 +173,24 @@ class SolarRadiation(models.Model):
                 'month': month_num,
                 'radiation': 4.5,  # Default value
             })
+    # Agregar este método en la clase SolarRadiation (después del método _create_monthly_lines)
+
+    @api.model
+    def _get_state_by_code(self, country_code, state_code):
+        """Helper method to get state by country and state code"""
+        return self.env['res.country.state'].search([
+            ('code', '=', state_code),
+            ('country_id.code', '=', country_code)
+        ], limit=1)
+
+    def _set_default_state_ecuador(self):
+        """Set default state for Ecuador if not specified"""
+        if not self.state_id and self.country_id and self.country_id.code == 'EC':
+            # Default to Manabí (code 13) for Ecuador
+            default_state = self._get_state_by_code('EC', '13')
+            if default_state:
+                self.state_id = default_state
+    
 
 
 class SolarRadiationMonth(models.Model):
