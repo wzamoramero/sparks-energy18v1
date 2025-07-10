@@ -199,7 +199,7 @@
             <field name="name">Solar Radiation Manta 2024</field>
             <field name="year" ref="energy_projection_2024"/>
             <field name="country_id" ref="base.ec"/>
-            <field name="state_id" ref="base.state_ec_m"/>
+            <field name="state_id" eval="False"/>
             <field name="city">Manta</field>
             <field name="percentage_adjustment">0.0</field>
         </record>
@@ -208,7 +208,7 @@
             <field name="name">Solar Radiation Portoviejo 2024</field>
             <field name="year" ref="energy_projection_2024"/>
             <field name="country_id" ref="base.ec"/>
-            <field name="state_id" ref="base.state_ec_m"/>
+            <field name="state_id" eval="False"/>
             <field name="city">Portoviejo</field>
             <field name="percentage_adjustment">0.0</field>
         </record>
