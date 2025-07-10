@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from . import consumption_line
 from . import solar_quotation
 from . import auxiliary_models
 from . import energy_meter
