@@ -177,6 +177,15 @@ class EnergyMeter(models.Model):
                     raise ValidationError(_("Supply number '%s' already exists for meter '%s'") % 
                                         (meter.supply_number, existing.display_name))
 
+
+    @api.onchange('city_id')
+    def _onchange_city_id(self):
+        """Update installation address suggestions based on city"""
+        if self.city_id and self.city_id.city:
+            if not self.installation_address:
+                # Suggest city name in address if empty
+                self.installation_address = f"{self.city_id.city}, {self.city_id.state_id.name if self.city_id.state_id else 'Ecuador'}"
+
     def action_view_quotations(self):
         """View solar quotations for this meter"""
         self.ensure_one()
