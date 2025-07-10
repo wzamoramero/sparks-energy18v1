@@ -65,14 +65,16 @@
 
                         <notebook>
                             <page string="Monthly Consumption" name="consumption">
+                                <!-- WIZARD BUTTON TEMPORALMENTE COMENTADO - SE AGREGARÁ DESPUÉS -->
+                                <!-- 
                                 <div class="oe_button_box" name="import_button_box">
-                                    <button name="%(action_import_consumption_wizard)d" 
-                                            type="action" 
+                                    <button name="action_import_consumption" 
+                                            type="object" 
                                             string="Import from Excel/CSV" 
                                             class="btn-secondary"
-                                            icon="fa-upload"
-                                            context="{'default_quotation_id': active_id}"/>
+                                            icon="fa-upload"/>
                                 </div>
+                                -->
                                 
                                 <div class="alert alert-info" role="alert" 
                                      invisible="meter_count &lt;= 1">
@@ -243,7 +245,7 @@
                 <kanban default_group_by="state" class="o_kanban_small_column">
                     <field name="name"/>
                     <field name="partner_id"/>
-                    <field name="system_power_kw"/>
+                    <field name="actual_system_power_kw"/>
                     <field name="total_investment"/>
                     <field name="state"/>
                     <field name="color"/>
@@ -262,8 +264,8 @@
                                     <div class="o_kanban_record_body">
                                         <field name="partner_id"/>
                                         <br/>
-                                        <t t-if="record.system_power_kw.value">
-                                            <i class="fa fa-bolt"/> <field name="system_power_kw"/> kW
+                                        <t t-if="record.actual_system_power_kw.value">
+                                            <i class="fa fa-bolt"/> <field name="actual_system_power_kw"/> kW
                                         </t>
                                         <br/>
                                         <t t-if="record.total_investment.value">
