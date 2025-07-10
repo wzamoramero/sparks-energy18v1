@@ -35,6 +35,7 @@
         'sale',
         'account',
         'contacts',
+        'l10n_ec',
     ],
     'data': [
         # Security
@@ -44,13 +45,15 @@
         'data/sequences.xml',
         'data/energy_price_projection_data.xml',
         
-        # Views
-        'views/menu_views.xml',
+        # Views (ANTES QUE LOS MENÚS)
         'views/solar_quotation_views.xml',
         'views/energy_meter_views.xml',
         'views/solar_panel_product_views.xml',
         'views/auxiliary_views.xml',
         'views/res_partner_views.xml',
+        
+        # Menús (AL FINAL)
+        'views/menu_views.xml',
         
         # Wizards
         'wizards/import_consumption_wizard.xml',
