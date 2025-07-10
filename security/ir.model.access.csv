@@ -5,8 +5,6 @@ access_sparks_consumption_line_user,sparks.consumption.line.user,model_sparks_co
 access_sparks_energy_meter_user,sparks.energy.meter.user,model_sparks_energy_meter,base.group_user,1,1,1,0
 access_sparks_energy_meter_manager,sparks.energy.meter.manager,model_sparks_energy_meter,sales_team.group_sale_manager,1,1,1,1
 access_sparks_meter_consumption_user,sparks.meter.consumption.user,model_sparks_meter_consumption,base.group_user,1,1,1,1
-access_sparks_multi_meter_wizard_user,sparks.multi.meter.wizard.user,model_sparks_multi_meter_quotation_wizard,base.group_user,1,1,1,1
-access_sparks_multi_meter_preview_user,sparks.multi.meter.preview.user,model_sparks_multi_meter_preview_line,base.group_user,1,1,1,1
 access_sparks_import_wizard_user,sparks.import.wizard.user,model_sparks_import_consumption_wizard,base.group_user,1,1,1,1
 access_sparks_energy_projection_user,sparks.energy.projection.user,model_sparks_energy_projection,base.group_user,1,0,0,0
 access_sparks_energy_projection_manager,sparks.energy.projection.manager,model_sparks_energy_projection,sales_team.group_sale_manager,1,1,1,1
