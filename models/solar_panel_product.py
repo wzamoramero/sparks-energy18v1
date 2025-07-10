@@ -132,7 +132,7 @@ class SolarPanelProduct(models.Model):
     # Additional Information
     description = fields.Text(string='Description')
     notes = fields.Text(string='Technical Notes')
-    datasheet_url = fields.Url(string='Datasheet URL')
+    datasheet_url = fields.Char(string='Datasheet URL', help='URL to product datasheet')
     
     # System Integration
     currency_id = fields.Many2one(
