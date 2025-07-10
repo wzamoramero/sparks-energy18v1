@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Multi-Meter Quotation Wizard Form -->
+        <record id="view_multi_meter_quotation_wizard_form" model="ir.ui.view">
+            <field name="name">sparks.multi.meter.quotation.wizard.form</field>
+            <field name="model">sparks.multi.meter.quotation.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Create Quotation with Multiple Meters">
+                    <group>
+                        <group string="Customer &amp; Meters">
+                            <field name="partner_id" readonly="1"/>
+                            <field name="meter_ids" widget="many2many_tags" 
+                                   domain="[('partner_id', '=', partner_id)]"
+                                   options="{'no_create': True}"/>
+                            <field name="meter_count" readonly="1"/>
+                            <field name="location_strategy"/>
+                        </group>
+                        <group string="Installation Details">
+                            <field name="city_id" required="1"/>
+                            <field name="total_annual_consumption" readonly="1"/>
+                            <field name="estimated_system_size" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <field name="installation_address" 
+                               placeholder="Common installation address for the solar system..."/>
+                    </group>
+
+                    <notebook>
+                        <page string="Consumption Preview" name="preview">
+                            <div class="alert alert-info" role="alert">
+                                <strong>Combined Consumption:</strong> 
+                                The data below shows the accumulated consumption from all selected meters.
+                                This will be used to calculate the optimal solar system size.
+                            </div>
+                            
+                            <field name="preview_line_ids">
+                                <tree>
+                                    <field name="month"/>
+                                    <field name="energy_kwh"/>
+                                    <field name="energy_cost" optional="show"/>
+                                    <field name="meter_breakdown"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                    <footer>
+                        <button string="Create Quotation" 
+                                name="action_create_quotation" 
+                                type="object" 
+                                class="btn-primary"/>
+                        <button string="Cancel" 
+                                class="btn-secondary" 
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for Multi-Meter Quotation Wizard -->
+        <record id="action_multi_meter_quotation_wizard" model="ir.actions.act_window">
+            <field name="name">Create Multi-Meter Quotation</field>
+            <field name="res_model">sparks.multi.meter.quotation.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

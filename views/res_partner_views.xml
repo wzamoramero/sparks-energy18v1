@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Extend Partner Form View -->
+        <record id="view_partner_form_sparks" model="ir.ui.view">
+            <field name="name">res.partner.form.sparks</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add smart buttons -->
+                <div name="button_box" position="inside">
+                    <button type="object" 
+                            name="action_view_energy_meters" 
+                            class="oe_stat_button" 
+                            icon="fa-tachometer"
+                            invisible="energy_meter_count == 0">
+                        <field name="energy_meter_count" widget="statinfo" 
+                               string="Energy Meters"/>
+                    </button>
+                    <button type="object" 
+                            name="action_view_solar_quotations" 
+                            class="oe_stat_button" 
+                            icon="fa-sun-o"
+                            invisible="solar_quotation_count == 0">
+                        <field name="solar_quotation_count" widget="statinfo" 
+                               string="Solar Quotations"/>
+                    </button>
+                    <button type="object" 
+                            name="create_solar_quotation" 
+                            class="oe_stat_button" 
+                            icon="fa-plus"
+                            string="New Quotation"/>
+                    <button type="object" 
+                            name="action_create_multi_meter_quotation" 
+                            class="oe_stat_button" 
+                            icon="fa-plus-square"
+                            string="Multi-Meter Quotation"
+                            invisible="energy_meter_count &lt; 2"/>
+                </div>
+
+                <!-- Add Solar Energy tab -->
+                <page name="sales_purchases" position="after">
+                    <page string="Energy &amp; Solar" name="energy_solar" 
+                          invisible="not energy_meter_ids and not solar_quotation_ids">
+                        <group>
+                            <group string="Energy Statistics">
+                                <field name="total_monthly_consumption"/>
+                                <field name="total_installed_capacity"/>
+                            </group>
+                            <group string="Preferences">
+                                <field name="preferred_panel_type"/>
+                                <field name="installation_type"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="energy_goals" 
+                                   placeholder="Customer's energy goals and specific requirements..."/>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Energy Meters" name="meters">
+                                <field name="energy_meter_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="supply_number"/>
+                                        <field name="installation_address"/>
+                                        <field name="meter_type"/>
+                                        <field name="average_monthly_consumption"/>
+                                        <field name="status" widget="badge"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <page string="Solar Quotations" name="quotations">
+                                <field name="solar_quotation_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="quotation_date"/>
+                                        <field name="meter_id"/>
+                                        <field name="city_id"/>
+                                        <field name="system_power_kw"/>
+                                        <field name="total_investment"/>
+                                        <field name="state" widget="badge"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </page>
+                </page>
+            </field>
+        </record>
+
+        <!-- Customer Solar Quotations Action -->
+        <record id="action_customer_solar_quotations" model="ir.actions.act_window">
+            <field name="name">Solar Energy Customers</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('solar_quotation_count', '>', 0)]</field>
+            <field name="context">{'search_default_customer': 1}</field>
+        </record>
+
+        <!-- Add menu item for solar customers -->
+        <menuitem id="menu_solar_customers" 
+                  name="Solar Customers" 
+                  parent="menu_sparks_quotations" 
+                  action="action_customer_solar_quotations" 
+                  sequence="30"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Main Menu -->
+        <menuitem id="menu_sparks_main" 
+                  name="Sparks Energy" 
+                  sequence="5"
+                  web_icon="sparks,static/description/icon.png"/>
+
+        <!-- Quotations Menu -->
+        <menuitem id="menu_sparks_quotations" 
+                  name="Quotations" 
+                  parent="menu_sparks_main" 
+                  sequence="10"/>
+
+        <menuitem id="menu_solar_quotation" 
+                  name="Solar Quotations" 
+                  parent="menu_sparks_quotations" 
+                  action="action_solar_quotation" 
+                  sequence="10"/>
+
+        <menuitem id="menu_consumption_data" 
+                  name="Consumption Data" 
+                  parent="menu_sparks_quotations" 
+                  action="action_consumption_line" 
+                  sequence="20"/>
+
+        <!-- Configuration Menu -->
+        <menuitem id="menu_sparks_configuration" 
+                  name="Configuration" 
+                  parent="menu_sparks_main" 
+                  sequence="90"/>
+
+        <menuitem id="menu_solar_radiation" 
+                  name="Solar Radiation Data" 
+                  parent="menu_sparks_configuration" 
+                  action="action_solar_radiation" 
+                  sequence="10"/>
+
+        <menuitem id="menu_energy_projection" 
+                  name="Energy Price Projections" 
+                  parent="menu_sparks_configuration" 
+                  action="action_energy_projection" 
+                  sequence="20"/>
+
+        <!-- Solar Kit Configuration -->
+        <menuitem id="menu_solar_kit_config" 
+                  name="Solar Components" 
+                  parent="menu_sparks_configuration" 
+                  sequence="30"/>
+
+        <menuitem id="menu_solar_panel_catalog" 
+                  name="Solar Panel Catalog" 
+                  parent="menu_solar_kit_config" 
+                  action="action_solar_panel_product" 
+                  sequence="5"/>
+
+        <menuitem id="menu_solar_kit_capacity" 
+                  name="Power Capacities" 
+                  parent="menu_solar_kit_config" 
+                  action="action_solar_kit_capacity" 
+                  sequence="10"/>
+
+        <menuitem id="menu_solar_kit_reference" 
+                  name="Reference Costs" 
+                  parent="menu_solar_kit_config" 
+                  action="action_solar_kit_reference" 
+                  sequence="20"/>
+
+        <menuitem id="menu_solar_kit_detail" 
+                  name="Cost Details" 
+                  parent="menu_solar_kit_config" 
+                  action="action_solar_kit_detail" 
+                  sequence="30"/>
+
+        <!-- Reports Menu -->
+        <menuitem id="menu_sparks_reports" 
+                  name="Reports" 
+                  parent="menu_sparks_main" 
+                  sequence="80"/>
+
+    </data>
+</odoo>

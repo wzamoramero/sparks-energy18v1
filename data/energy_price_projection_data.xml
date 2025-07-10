@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Energy Price Projections -->
+        <record id="energy_projection_2024" model="sparks.energy.projection">
+            <field name="name">2024</field>
+            <field name="actual_price">0.126</field>
+            <field name="projected_price">0.126</field>
+            <field name="inflation_rate">3.5</field>
+            <field name="status">active</field>
+            <field name="calculation_allowed">active</field>
+        </record>
+
+        <record id="energy_projection_2025" model="sparks.energy.projection">
+            <field name="name">2025</field>
+            <field name="actual_price">0.128</field>
+            <field name="projected_price">0.130</field>
+            <field name="inflation_rate">3.8</field>
+            <field name="status">active</field>
+            <field name="calculation_allowed">active</field>
+        </record>
+
+        <record id="energy_projection_2026" model="sparks.energy.projection">
+            <field name="name">2026</field>
+            <field name="actual_price">0.130</field>
+            <field name="projected_price">0.135</field>
+            <field name="inflation_rate">4.0</field>
+            <field name="status">active</field>
+            <field name="calculation_allowed">active</field>
+        </record>
+
+        <record id="energy_projection_2027" model="sparks.energy.projection">
+            <field name="name">2027</field>
+            <field name="actual_price">0.135</field>
+            <field name="projected_price">0.140</field>
+            <field name="inflation_rate">4.2</field>
+            <field name="status">active</field>
+            <field name="calculation_allowed">active</field>
+        </record>
+
+        <record id="energy_projection_2028" model="sparks.energy.projection">
+            <field name="name">2028</field>
+            <field name="actual_price">0.140</field>
+            <field name="projected_price">0.146</field>
+            <field name="inflation_rate">4.3</field>
+            <field name="status">active</field>
+            <field name="calculation_allowed">active</field>
+        </record>
+
+        <!-- Solar Panel Products -->
+        <record id="solar_panel_jinko_550" model="sparks.solar.panel.product">
+            <field name="name">JKM550M-7RL4-V</field>
+            <field name="manufacturer">Jinko Solar</field>
+            <field name="model_code">JKM550M-7RL4-V</field>
+            <field name="power_wp">550</field>
+            <field name="efficiency">21.4</field>
+            <field name="length_mm">2274</field>
+            <field name="width_mm">1134</field>
+            <field name="thickness_mm">30</field>
+            <field name="technology">mono</field>
+            <field name="voltage_vmp">41.8</field>
+            <field name="current_imp">13.16</field>
+            <field name="voltage_voc">50.1</field>
+            <field name="current_isc">13.92</field>
+            <field name="temp_coeff_power">-0.40</field>
+            <field name="temp_coeff_voltage">-0.27</field>
+            <field name="unit_cost">180</field>
+            <field name="warranty_years">25</field>
+            <field name="application">all</field>
+            <field name="is_preferred">True</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="solar_panel_canadian_450" model="sparks.solar.panel.product">
+            <field name="name">CS3W-450MS</field>
+            <field name="manufacturer">Canadian Solar</field>
+            <field name="model_code">CS3W-450MS</field>
+            <field name="power_wp">450</field>
+            <field name="efficiency">20.9</field>
+            <field name="length_mm">2108</field>
+            <field name="width_mm">1048</field>
+            <field name="thickness_mm">32</field>
+            <field name="technology">mono</field>
+            <field name="voltage_vmp">40.9</field>
+            <field name="current_imp">11.01</field>
+            <field name="voltage_voc">49.8</field>
+            <field name="current_isc">11.64</field>
+            <field name="temp_coeff_power">-0.37</field>
+            <field name="temp_coeff_voltage">-0.28</field>
+            <field name="unit_cost">155</field>
+            <field name="warranty_years">25</field>
+            <field name="application">all</field>
+            <field name="is_preferred">False</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="solar_panel_longi_585" model="sparks.solar.panel.product">
+            <field name="name">LR5-72HPH-585M</field>
+            <field name="manufacturer">LONGi Solar</field>
+            <field name="model_code">LR5-72HPH-585M</field>
+            <field name="power_wp">585</field>
+            <field name="efficiency">22.3</field>
+            <field name="length_mm">2278</field>
+            <field name="width_mm">1134</field>
+            <field name="thickness_mm">30</field>
+            <field name="technology">perc</field>
+            <field name="voltage_vmp">44.5</field>
+            <field name="current_imp">13.15</field>
+            <field name="voltage_voc">53.7</field>
+            <field name="current_isc">13.93</field>
+            <field name="temp_coeff_power">-0.35</field>
+            <field name="temp_coeff_voltage">-0.25</field>
+            <field name="unit_cost">195</field>
+            <field name="warranty_years">25</field>
+            <field name="application">commercial</field>
+            <field name="is_preferred">True</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="solar_panel_trina_400" model="sparks.solar.panel.product">
+            <field name="name">TSM-400DE09.08</field>
+            <field name="manufacturer">Trina Solar</field>
+            <field name="model_code">TSM-400DE09.08</field>
+            <field name="power_wp">400</field>
+            <field name="efficiency">20.5</field>
+            <field name="length_mm">1754</field>
+            <field name="width_mm">1096</field>
+            <field name="thickness_mm">30</field>
+            <field name="technology">mono</field>
+            <field name="voltage_vmp">31.1</field>
+            <field name="current_imp">12.87</field>
+            <field name="voltage_voc">37.8</field>
+            <field name="current_isc">13.78</field>
+            <field name="temp_coeff_power">-0.38</field>
+            <field name="temp_coeff_voltage">-0.26</field>
+            <field name="unit_cost">140</field>
+            <field name="warranty_years">25</field>
+            <field name="application">residential</field>
+            <field name="is_preferred">False</field>
+            <field name="active">True</field>
+        </record>
+        <record id="solar_capacity_1_5kw" model="sparks.solar.kit.capacity">
+            <field name="name">1.5kW Residential</field>
+            <field name="power">1.5</field>
+            <field name="recommended_usage">residential</field>
+        </record>
+
+        <record id="solar_capacity_4kw" model="sparks.solar.kit.capacity">
+            <field name="name">4kW Residential</field>
+            <field name="power">4.0</field>
+            <field name="recommended_usage">residential</field>
+        </record>
+
+        <record id="solar_capacity_5kw" model="sparks.solar.kit.capacity">
+            <field name="name">5kW Residential</field>
+            <field name="power">5.0</field>
+            <field name="recommended_usage">residential</field>
+        </record>
+
+        <record id="solar_capacity_6kw" model="sparks.solar.kit.capacity">
+            <field name="name">6kW Residential</field>
+            <field name="power">6.0</field>
+            <field name="recommended_usage">residential</field>
+        </record>
+
+        <record id="solar_capacity_10kw" model="sparks.solar.kit.capacity">
+            <field name="name">10kW Commercial</field>
+            <field name="power">10.0</field>
+            <field name="recommended_usage">commercial</field>
+        </record>
+
+        <record id="solar_capacity_15kw" model="sparks.solar.kit.capacity">
+            <field name="name">15kW Commercial</field>
+            <field name="power">15.0</field>
+            <field name="recommended_usage">commercial</field>
+        </record>
+
+        <record id="solar_capacity_20kw" model="sparks.solar.kit.capacity">
+            <field name="name">20kW Commercial</field>
+            <field name="power">20.0</field>
+            <field name="recommended_usage">commercial</field>
+        </record>
+
+        <record id="solar_capacity_50kw" model="sparks.solar.kit.capacity">
+            <field name="name">50kW Industrial</field>
+            <field name="power">50.0</field>
+            <field name="recommended_usage">industrial</field>
+        </record>
+
+        <record id="solar_capacity_100kw" model="sparks.solar.kit.capacity">
+            <field name="name">100kW Industrial</field>
+            <field name="power">100.0</field>
+            <field name="recommended_usage">industrial</field>
+        </record>
+
+        <!-- Solar Radiation Data for Ecuador - Manabi -->
+        <record id="solar_radiation_manta_2024" model="sparks.solar.radiation">
+            <field name="name">Solar Radiation Manta 2024</field>
+            <field name="year" ref="energy_projection_2024"/>
+            <field name="country_id" ref="base.ec"/>
+            <field name="state_id" ref="base.state_ec_m"/>
+            <field name="city">Manta</field>
+            <field name="percentage_adjustment">0.0</field>
+        </record>
+
+        <record id="solar_radiation_portoviejo_2024" model="sparks.solar.radiation">
+            <field name="name">Solar Radiation Portoviejo 2024</field>
+            <field name="year" ref="energy_projection_2024"/>
+            <field name="country_id" ref="base.ec"/>
+            <field name="state_id" ref="base.state_ec_m"/>
+            <field name="city">Portoviejo</field>
+            <field name="percentage_adjustment">0.0</field>
+        </record>
+
+        <!-- Reference Cost for 2024 -->
+        <record id="solar_kit_reference_2024" model="sparks.solar.kit.reference">
+            <field name="name">Solar Kit Costs 2024</field>
+            <field name="year" ref="energy_projection_2024"/>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Cost details for different capacities -->
+        <record id="solar_kit_detail_4kw" model="sparks.solar.kit.detail">
+            <field name="reference_id" ref="solar_kit_reference_2024"/>
+            <field name="power_capacity_id" ref="solar_capacity_4kw"/>
+            <field name="equipment_cost">3200</field>
+            <field name="installation_cost">800</field>
+            <field name="freight_cost">200</field>
+            <field name="other_costs">200</field>
+        </record>
+
+        <record id="solar_kit_detail_5kw" model="sparks.solar.kit.detail">
+            <field name="reference_id" ref="solar_kit_reference_2024"/>
+            <field name="power_capacity_id" ref="solar_capacity_5kw"/>
+            <field name="equipment_cost">4000</field>
+            <field name="installation_cost">1000</field>
+            <field name="freight_cost">250</field>
+            <field name="other_costs">250</field>
+        </record>
+
+        <record id="solar_kit_detail_6kw" model="sparks.solar.kit.detail">
+            <field name="reference_id" ref="solar_kit_reference_2024"/>
+            <field name="power_capacity_id" ref="solar_capacity_6kw"/>
+            <field name="equipment_cost">4800</field>
+            <field name="installation_cost">1200</field>
+            <field name="freight_cost">300</field>
+            <field name="other_costs">300</field>
+        </record>
+
+        <record id="solar_kit_detail_10kw" model="sparks.solar.kit.detail">
+            <field name="reference_id" ref="solar_kit_reference_2024"/>
+            <field name="power_capacity_id" ref="solar_capacity_10kw"/>
+            <field name="equipment_cost">8000</field>
+            <field name="installation_cost">2000</field>
+            <field name="freight_cost">500</field>
+            <field name="other_costs">500</field>
+        </record>
+
+    </data>
+</odoo>

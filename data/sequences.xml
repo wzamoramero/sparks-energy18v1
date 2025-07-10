@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequence for Solar Quotations -->
+        <record id="sequence_solar_quotation" model="ir.sequence">
+            <field name="name">Solar Quotation Sequence</field>
+            <field name="code">sparks.solar.quotation</field>
+            <field name="prefix">SQ</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

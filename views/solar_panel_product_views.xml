@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Solar Panel Product Form View -->
+        <record id="view_solar_panel_product_form" model="ir.ui.view">
+            <field name="name">sparks.solar.panel.product.form</field>
+            <field name="model">sparks.solar.panel.product</field>
+            <field name="arch" type="xml">
+                <form string="Solar Panel Product">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!-- Add smart buttons here if needed -->
+                        </div>
+                        
+                        <div class="oe_title">
+                            <label for="name" string="Panel Model"/>
+                            <h1>
+                                <field name="name" placeholder="e.g. JKM550M-7RL4-V"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Basic Information">
+                                <field name="manufacturer"/>
+                                <field name="model_code"/>
+                                <field name="technology"/>
+                                <field name="application"/>
+                                <field name="active"/>
+                                <field name="is_preferred"/>
+                            </group>
+                            <group string="Power Specifications">
+                                <field name="power_wp"/>
+                                <field name="efficiency"/>
+                                <field name="power_density" readonly="1"/>
+                                <field name="warranty_years"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Physical Specifications" name="physical">
+                                <group>
+                                    <group string="Dimensions">
+                                        <field name="length_mm"/>
+                                        <field name="width_mm"/>
+                                        <field name="thickness_mm"/>
+                                        <field name="area_m2" readonly="1"/>
+                                    </group>
+                                    <group string="Electrical Parameters">
+                                        <field name="voltage_vmp"/>
+                                        <field name="current_imp"/>
+                                        <field name="voltage_voc"/>
+                                        <field name="current_isc"/>
+                                    </group>
+                                </group>
+                                
+                                <group>
+                                    <group string="Temperature Coefficients">
+                                        <field name="temp_coeff_power"/>
+                                        <field name="temp_coeff_voltage"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Commercial Information" name="commercial">
+                                <group>
+                                    <group>
+                                        <field name="unit_cost"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="datasheet_url"/>
+                                    </group>
+                                </group>
+                                
+                                <group>
+                                    <field name="description" placeholder="Product description..."/>
+                                </group>
+                                
+                                <group>
+                                    <field name="notes" placeholder="Technical notes and observations..."/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Solar Panel Product Tree View -->
+        <record id="view_solar_panel_product_tree" model="ir.ui.view">
+            <field name="name">sparks.solar.panel.product.tree</field>
+            <field name="model">sparks.solar.panel.product</field>
+            <field name="arch" type="xml">
+                <tree string="Solar Panel Products" decoration-success="is_preferred" 
+                      decoration-muted="not active">
+                    <field name="manufacturer"/>
+                    <field name="name"/>
+                    <field name="power_wp"/>
+                    <field name="efficiency"/>
+                    <field name="area_m2"/>
+                    <field name="power_density"/>
+                    <field name="technology"/>
+                    <field name="unit_cost" optional="show"/>
+                    <field name="is_preferred" widget="boolean_toggle"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Solar Panel Product Kanban View -->
+        <record id="view_solar_panel_product_kanban" model="ir.ui.view">
+            <field name="name">sparks.solar.panel.product.kanban</field>
+            <field name="model">sparks.solar.panel.product</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="technology" class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="manufacturer"/>
+                    <field name="power_wp"/>
+                    <field name="efficiency"/>
+                    <field name="area_m2"/>
+                    <field name="unit_cost"/>
+                    <field name="is_preferred"/>
+                    <field name="technology"/>
+                    
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click #{record.is_preferred.raw_value ? 'border-success' : ''}">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+                                            <small class="o_kanban_record_subtitle text-muted">
+                                                <field name="manufacturer"/>
+                                            </small>
+                                        </div>
+                                        <div class="o_kanban_record_action">
+                                            <t t-if="record.is_preferred.raw_value">
+                                                <span class="badge badge-success">Preferred</span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <i class="fa fa-bolt"/> <field name="power_wp"/> W<br/>
+                                        <i class="fa fa-area-chart"/> <field name="efficiency"/>% efficiency<br/>
+                                        <i class="fa fa-square-o"/> <field name="area_m2"/> m²<br/>
+                                        <t t-if="record.unit_cost.value">
+                                            <i class="fa fa-usd"/> <field name="unit_cost"/>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Solar Panel Product Search View -->
+        <record id="view_solar_panel_product_search" model="ir.ui.view">
+            <field name="name">sparks.solar.panel.product.search</field>
+            <field name="model">sparks.solar.panel.product</field>
+            <field name="arch" type="xml">
+                <search string="Solar Panel Products">
+                    <field name="name" string="Panel Model"/>
+                    <field name="manufacturer" string="Manufacturer"/>
+                    <field name="power_wp" string="Power"/>
+                    <field name="technology" string="Technology"/>
+                    
+                    <filter string="Active" name="active" 
+                            domain="[('active', '=', True)]"/>
+                    <filter string="Preferred" name="preferred" 
+                            domain="[('is_preferred', '=', True)]"/>
+                    
+                    <separator/>
+                    <filter string="Residential" name="residential" 
+                            domain="[('application', 'in', ['residential', 'all'])]"/>
+                    <filter string="Commercial" name="commercial" 
+                            domain="[('application', 'in', ['commercial', 'all'])]"/>
+                    <filter string="Industrial" name="industrial" 
+                            domain="[('application', 'in', ['industrial', 'all'])]"/>
+                    
+                    <separator/>
+                    <filter string="Monocrystalline" name="mono" 
+                            domain="[('technology', '=', 'mono')]"/>
+                    <filter string="Polycrystalline" name="poly" 
+                            domain="[('technology', '=', 'poly')]"/>
+                    <filter string="PERC" name="perc" 
+                            domain="[('technology', '=', 'perc')]"/>
+                    <filter string="Bifacial" name="bifacial" 
+                            domain="[('technology', '=', 'bifacial')]"/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter string="Manufacturer" name="group_manufacturer" 
+                                context="{'group_by': 'manufacturer'}"/>
+                        <filter string="Technology" name="group_technology" 
+                                context="{'group_by': 'technology'}"/>
+                        <filter string="Application" name="group_application" 
+                                context="{'group_by': 'application'}"/>
+                        <filter string="Power Range" name="group_power" 
+                                context="{'group_by': 'power_wp'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_solar_panel_product" model="ir.actions.act_window">
+            <field name="name">Solar Panel Catalog</field>
+            <field name="res_model">sparks.solar.panel.product</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first solar panel product!
+                </p>
+                <p>
+                    Maintain a catalog of solar panel products with their technical
+                    specifications, dimensions, and pricing for accurate quotations.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

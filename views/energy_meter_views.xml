@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Energy Meter Form View -->
+        <record id="view_energy_meter_form" model="ir.ui.view">
+            <field name="name">sparks.energy.meter.form</field>
+            <field name="model">sparks.energy.meter</field>
+            <field name="arch" type="xml">
+                <form string="Energy Meter">
+                    <header>
+                        <field name="status" widget="statusbar" 
+                               statusbar_visible="active,inactive,disconnected"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" 
+                                    name="action_view_quotations" 
+                                    class="oe_stat_button" 
+                                    icon="fa-sun-o"
+                                    invisible="quotation_count == 0">
+                                <field name="quotation_count" widget="statinfo" 
+                                       string="Solar Quotations"/>
+                            </button>
+                            <button type="object" 
+                                    name="action_create_quotation" 
+                                    class="oe_stat_button" 
+                                    icon="fa-plus"
+                                    string="New Quotation"/>
+                            <button type="object" 
+                                    name="action_import_consumption" 
+                                    class="oe_stat_button" 
+                                    icon="fa-upload"
+                                    string="Import Data"/>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <label for="name" string="Meter Code"/>
+                            <h1>
+                                <field name="name" placeholder="e.g. MTR-001"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Basic Information">
+                                <field name="partner_id" 
+                                       options="{'no_create': True, 'no_edit': True}"/>
+                                <field name="supply_number"/>
+                                <field name="meter_serial"/>
+                                <field name="city_id"/>
+                            </group>
+                            <group string="Technical Specifications">
+                                <field name="meter_type"/>
+                                <field name="voltage_level"/>
+                                <field name="phases"/>
+                                <field name="installation_date"/>
+                                <field name="last_reading_date"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="installation_address" 
+                                   placeholder="Specific installation address for this meter..."/>
+                        </group>
+
+                        <notebook>
+                            <page string="Consumption Statistics" name="statistics">
+                                <group>
+                                    <group string="Consumption Summary">
+                                        <field name="average_monthly_consumption" readonly="1"/>
+                                        <field name="peak_monthly_consumption" readonly="1"/>
+                                    </group>
+                                    <group string="Annual Data">
+                                        <field name="total_annual_consumption" readonly="1"/>
+                                        <field name="last_12_months_consumption" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Historical Consumption" name="consumption">
+                                <field name="consumption_line_ids">
+                                    <tree editable="bottom" default_order="year desc, month desc">
+                                        <field name="year"/>
+                                        <field name="month"/>
+                                        <field name="energy_kwh"/>
+                                        <field name="energy_cost" optional="show"/>
+                                        <field name="max_demand_kw" optional="hide"/>
+                                        <field name="bill_number" optional="hide"/>
+                                        <field name="bill_date" optional="hide"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="year"/>
+                                                <field name="month"/>
+                                                <field name="energy_kwh"/>
+                                                <field name="energy_cost"/>
+                                            </group>
+                                            <group>
+                                                <field name="power_factor"/>
+                                                <field name="max_demand_kw"/>
+                                                <field name="peak_hours_kwh"/>
+                                                <field name="off_peak_hours_kwh"/>
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <group>
+                                                <field name="bill_number"/>
+                                                <field name="bill_date"/>
+                                                <field name="due_date"/>
+                                            </group>
+                                            <group>
+                                                <field name="notes"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            
+                            <page string="Solar Quotations" name="quotations" 
+                                  invisible="quotation_count == 0">
+                                <field name="quotation_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="quotation_date"/>
+                                        <field name="system_power_kw"/>
+                                        <field name="total_investment"/>
+                                        <field name="state" widget="badge"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        
+                        <group>
+                            <field name="notes" placeholder="Additional notes about this meter..."/>
+                        </group>
+                    </sheet>
+                    
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Energy Meter Tree View -->
+        <record id="view_energy_meter_tree" model="ir.ui.view">
+            <field name="name">sparks.energy.meter.tree</field>
+            <field name="model">sparks.energy.meter</field>
+            <field name="arch" type="xml">
+                <tree string="Energy Meters" decoration-muted="status=='inactive'" 
+                      decoration-danger="status=='disconnected'">
+                    <field name="name"/>
+                    <field name="supply_number"/>
+                    <field name="partner_id"/>
+                    <field name="meter_type"/>
+                    <field name="city_id" optional="show"/>
+                    <field name="average_monthly_consumption"/>
+                    <field name="quotation_count"/>
+                    <field name="status" widget="badge" 
+                           decoration-success="status=='active'"
+                           decoration-warning="status=='maintenance'"
+                           decoration-danger="status=='disconnected'"
+                           decoration-muted="status=='inactive'"/>
+                    <field name="installation_date" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Energy Meter Kanban View -->
+        <record id="view_energy_meter_kanban" model="ir.ui.view">
+            <field name="name">sparks.energy.meter.kanban</field>
+            <field name="model">sparks.energy.meter</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="status" class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="supply_number"/>
+                    <field name="partner_id"/>
+                    <field name="average_monthly_consumption"/>
+                    <field name="status"/>
+                    <field name="quotation_count"/>
+                    
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+                                            <small class="o_kanban_record_subtitle text-muted">
+                                                <field name="supply_number"/>
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <field name="partner_id"/>
+                                        <br/>
+                                        <t t-if="record.average_monthly_consumption.value">
+                                            <i class="fa fa-bolt"/> <field name="average_monthly_consumption"/> kWh/month
+                                        </t>
+                                        <br/>
+                                        <t t-if="record.quotation_count.value">
+                                            <i class="fa fa-sun-o"/> <field name="quotation_count"/> quotations
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Energy Meter Search View -->
+        <record id="view_energy_meter_search" model="ir.ui.view">
+            <field name="name">sparks.energy.meter.search</field>
+            <field name="model">sparks.energy.meter</field>
+            <field name="arch" type="xml">
+                <search string="Energy Meters">
+                    <field name="name" string="Meter Code"/>
+                    <field name="supply_number" string="Supply Number"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="city_id" string="City"/>
+                    
+                    <filter string="Active" name="active" 
+                            domain="[('status', '=', 'active')]"/>
+                    <filter string="Inactive" name="inactive" 
+                            domain="[('status', '=', 'inactive')]"/>
+                    <filter string="Disconnected" name="disconnected" 
+                            domain="[('status', '=', 'disconnected')]"/>
+                    
+                    <separator/>
+                    <filter string="Residential" name="residential" 
+                            domain="[('meter_type', '=', 'residential')]"/>
+                    <filter string="Commercial" name="commercial" 
+                            domain="[('meter_type', '=', 'commercial')]"/>
+                    <filter string="Industrial" name="industrial" 
+                            domain="[('meter_type', '=', 'industrial')]"/>
+                    
+                    <separator/>
+                    <filter string="With Quotations" name="with_quotations" 
+                            domain="[('quotation_count', '>', 0)]"/>
+                    <filter string="No Quotations" name="no_quotations" 
+                            domain="[('quotation_count', '=', 0)]"/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter string="Customer" name="group_partner" 
+                                context="{'group_by': 'partner_id'}"/>
+                        <filter string="Status" name="group_status" 
+                                context="{'group_by': 'status'}"/>
+                        <filter string="Meter Type" name="group_type" 
+                                context="{'group_by': 'meter_type'}"/>
+                        <filter string="City" name="group_city" 
+                                context="{'group_by': 'city_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Meter Consumption Tree View -->
+        <record id="view_meter_consumption_tree" model="ir.ui.view">
+            <field name="name">sparks.meter.consumption.tree</field>
+            <field name="model">sparks.meter.consumption</field>
+            <field name="arch" type="xml">
+                <tree string="Meter Consumption History" editable="top" 
+                      default_order="year desc, month desc">
+                    <field name="meter_id"/>
+                    <field name="year"/>
+                    <field name="month"/>
+                    <field name="energy_kwh"/>
+                    <field name="energy_cost"/>
+                    <field name="max_demand_kw" optional="hide"/>
+                    <field name="power_factor" optional="hide"/>
+                    <field name="bill_number" optional="hide"/>
+                    <field name="bill_date" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_energy_meter" model="ir.actions.act_window">
+            <field name="name">Energy Meters</field>
+            <field name="res_model">sparks.energy.meter</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first energy meter!
+                </p>
+                <p>
+                    Energy meters track consumption data for your customers.
+                    Each customer can have multiple meters at different locations.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_meter_consumption" model="ir.actions.act_window">
+            <field name="name">Meter Consumption History</field>
+            <field name="res_model">sparks.meter.consumption</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

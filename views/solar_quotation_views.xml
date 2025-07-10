@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Solar Quotation Form View -->
+        <record id="view_solar_quotation_form" model="ir.ui.view">
+            <field name="name">sparks.solar.quotation.form</field>
+            <field name="model">sparks.solar.quotation</field>
+            <field name="arch" type="xml">
+                <form string="Solar Energy Quotation">
+                    <header>
+                        <button name="action_calculate_system" type="object" 
+                                string="Calculate System" 
+                                class="btn-primary"
+                                invisible="state not in ['draft']"/>
+                        <button name="action_send_quotation" type="object" 
+                                string="Send Quotation" 
+                                class="btn-primary"
+                                invisible="state not in ['calculated']"/>
+                        <button name="action_confirm_quotation" type="object" 
+                                string="Confirm" 
+                                class="btn-success"
+                                invisible="state not in ['sent']"/>
+                        <button name="action_reset_to_draft" type="object" 
+                                string="Reset to Draft" 
+                                invisible="state in ['draft']"/>
+                        <field name="state" widget="statusbar" 
+                               statusbar_visible="draft,calculated,sent,confirmed"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!-- Add smart buttons here if needed -->
+                        </div>
+                        
+                        <div class="oe_title">
+                            <label for="name" string="Quotation Number"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Customer Information">
+                                <field name="partner_id" 
+                                       options="{'no_create': True, 'no_edit': True}"/>
+                                <field name="meter_ids" widget="many2many_tags"
+                                       options="{'no_create': True}"
+                                       domain="[('partner_id', '=', partner_id)]"/>
+                                <field name="meter_count" readonly="1" 
+                                       invisible="meter_count &lt;= 1"/>
+                                <field name="user_id"/>
+                                <field name="quotation_date"/>
+                                <field name="validity_date"/>
+                            </group>
+                            <group string="Installation Details">
+                                <field name="city_id" 
+                                       options="{'no_create': True}"/>
+                                <field name="installation_address"/>
+                                <field name="selected_panel_id"
+                                       options="{'no_create': True}"/>
+                                <field name="system_efficiency"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Monthly Consumption" name="consumption">
+                                <div class="oe_button_box" name="import_button_box">
+                                    <button name="%(action_import_consumption_wizard)d" 
+                                            type="action" 
+                                            string="Import from Excel/CSV" 
+                                            class="btn-secondary"
+                                            icon="fa-upload"
+                                            context="{'default_quotation_id': active_id}"/>
+                                </div>
+                                
+                                <div class="alert alert-info" role="alert" 
+                                     invisible="meter_count &lt;= 1">
+                                    <strong>Multiple Meters Selected:</strong> 
+                                    Consumption data below represents the <strong>accumulated total</strong> 
+                                    from all <field name="meter_count" readonly="1"/> selected meters.
+                                </div>
+                                
+                                <field name="consumption_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="month"/>
+                                        <field name="energy_kwh"/>
+                                        <field name="energy_cost" optional="show"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="month"/>
+                                            <field name="energy_kwh"/>
+                                            <field name="energy_cost"/>
+                                        </group>
+                                    </form>
+                                </field>
+                                
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_annual_consumption" readonly="1"/>
+                                    <field name="average_monthly_consumption" readonly="1"/>
+                                    <field name="peak_monthly_consumption" readonly="1"/>
+                                </group>
+                            </page>
+                            
+                            <page string="System Design" name="system_design">
+                                <group>
+                                    <group string="System Specifications">
+                                        <field name="system_power_kw" readonly="1"/>
+                                        <field name="actual_system_power_kw" readonly="1"/>
+                                        <field name="panel_quantity" readonly="1"/>
+                                        <field name="total_panel_area_m2" readonly="1"/>
+                                    </group>
+                                    <group string="Selected Panel Details">
+                                        <field name="panel_power_wp" readonly="1"/>
+                                        <field name="panel_area_m2" readonly="1"/>
+                                        <field name="estimated_annual_production" readonly="1"/>
+                                        <field name="coverage_percentage" readonly="1"/>
+                                    </group>
+                                </group>
+                                
+                                <group>
+                                    <group string="Solar Radiation Data">
+                                        <field name="annual_solar_radiation" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Financial Analysis" name="financial">
+                                <group>
+                                    <group string="Investment Breakdown">
+                                        <field name="subtotal_investment" readonly="1"/>
+                                        <field name="tax_rate"/>
+                                        <field name="tax_amount" readonly="1"/>
+                                        <field name="total_investment" readonly="1"/>
+                                    </group>
+                                    <group string="Savings &amp; ROI">
+                                        <field name="monthly_savings" readonly="1"/>
+                                        <field name="payback_period_years" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Description &amp; Terms" name="description">
+                                <group>
+                                    <field name="description" nolabel="1" 
+                                           placeholder="System description and specifications..."/>
+                                </group>
+                                <separator string="Terms and Conditions"/>
+                                <group>
+                                    <field name="terms_conditions" nolabel="1" 
+                                           placeholder="Terms and conditions..."/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Solar Quotation Tree View -->
+        <record id="view_solar_quotation_tree" model="ir.ui.view">
+            <field name="name">sparks.solar.quotation.tree</field>
+            <field name="model">sparks.solar.quotation</field>
+            <field name="arch" type="xml">
+                <tree string="Solar Quotations" decoration-info="state=='draft'" 
+                      decoration-warning="state=='calculated'" 
+                      decoration-success="state=='confirmed'">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="meter_count" string="# Meters" optional="show"/>
+                    <field name="city_id"/>
+                    <field name="quotation_date"/>
+                    <field name="actual_system_power_kw" string="System (kW)"/>
+                    <field name="panel_quantity" optional="show"/>
+                    <field name="subtotal_investment" string="Subtotal"/>
+                    <field name="total_investment" sum="Total Investment"/>
+                    <field name="coverage_percentage"/>
+                    <field name="state" widget="badge" 
+                           decoration-info="state=='draft'" 
+                           decoration-warning="state in ['calculated','sent']"
+                           decoration-success="state=='confirmed'"
+                           decoration-muted="state=='cancelled'"/>
+                    <field name="user_id" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Solar Quotation Search View -->
+        <record id="view_solar_quotation_search" model="ir.ui.view">
+            <field name="name">sparks.solar.quotation.search</field>
+            <field name="model">sparks.solar.quotation</field>
+            <field name="arch" type="xml">
+                <search string="Solar Quotations">
+                    <field name="name" string="Quotation Number"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="city_id" string="City"/>
+                    <field name="user_id" string="Salesperson"/>
+                    
+                    <filter string="My Quotations" name="my_quotations" 
+                            domain="[('user_id', '=', uid)]"/>
+                    <filter string="Draft" name="draft" 
+                            domain="[('state', '=', 'draft')]"/>
+                    <filter string="Calculated" name="calculated" 
+                            domain="[('state', '=', 'calculated')]"/>
+                    <filter string="Sent" name="sent" 
+                            domain="[('state', '=', 'sent')]"/>
+                    <filter string="Confirmed" name="confirmed" 
+                            domain="[('state', '=', 'confirmed')]"/>
+                    
+                    <separator/>
+                    <filter string="This Month" name="this_month"
+                            domain="[('quotation_date', '>=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                     ('quotation_date', '&lt;', (context_today() + relativedelta(months=1, day=1)).strftime('%Y-%m-%d'))]"/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter string="Customer" name="group_partner" 
+                                context="{'group_by': 'partner_id'}"/>
+                        <filter string="City" name="group_city" 
+                                context="{'group_by': 'city_id'}"/>
+                        <filter string="Status" name="group_state" 
+                                context="{'group_by': 'state'}"/>
+                        <filter string="Salesperson" name="group_user" 
+                                context="{'group_by': 'user_id'}"/>
+                        <filter string="Month" name="group_month" 
+                                context="{'group_by': 'quotation_date:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Solar Quotation Kanban View -->
+        <record id="view_solar_quotation_kanban" model="ir.ui.view">
+            <field name="name">sparks.solar.quotation.kanban</field>
+            <field name="model">sparks.solar.quotation</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="system_power_kw"/>
+                    <field name="total_investment"/>
+                    <field name="state"/>
+                    <field name="color"/>
+                    
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <field name="partner_id"/>
+                                        <br/>
+                                        <t t-if="record.system_power_kw.value">
+                                            <i class="fa fa-bolt"/> <field name="system_power_kw"/> kW
+                                        </t>
+                                        <br/>
+                                        <t t-if="record.total_investment.value">
+                                            <i class="fa fa-usd"/> <field name="total_investment"/>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Consumption Line Tree View -->
+        <record id="view_consumption_line_tree" model="ir.ui.view">
+            <field name="name">sparks.consumption.line.tree</field>
+            <field name="model">sparks.consumption.line</field>
+            <field name="arch" type="xml">
+                <tree string="Monthly Consumption">
+                    <field name="quotation_id"/>
+                    <field name="month"/>
+                    <field name="energy_kwh"/>
+                    <field name="energy_cost"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_solar_quotation" model="ir.actions.act_window">
+            <field name="name">Solar Quotations</field>
+            <field name="res_model">sparks.solar.quotation</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_my_quotations': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first solar energy quotation!
+                </p>
+                <p>
+                    Start by creating a new quotation, adding the customer's monthly
+                    energy consumption data, and let the system calculate the optimal
+                    solar panel configuration.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_consumption_line" model="ir.actions.act_window">
+            <field name="name">Monthly Consumption Data</field>
+            <field name="res_model">sparks.consumption.line</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>
