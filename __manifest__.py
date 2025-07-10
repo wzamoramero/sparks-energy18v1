@@ -56,8 +56,8 @@
         'views/menu_views.xml',
         
         # Wizards
-        'wizards/import_consumption_wizard.xml',
-        'wizards/multi_meter_quotation_wizard.xml',
+        #'wizards/import_consumption_wizard.xml',
+        #'wizards/multi_meter_quotation_wizard.xml',
     ],
     'demo': [
         'demo/demo_data.xml',
