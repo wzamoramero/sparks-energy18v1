@@ -11,7 +11,7 @@ access_sparks_import_wizard_user,sparks.import.wizard.user,model_sparks_import_c
 access_sparks_energy_projection_user,sparks.energy.projection.user,model_sparks_energy_projection,base.group_user,1,0,0,0
 access_sparks_energy_projection_manager,sparks.energy.projection.manager,model_sparks_energy_projection,sales_team.group_sale_manager,1,1,1,1
 access_sparks_solar_radiation_user,sparks.solar.radiation.user,model_sparks_solar_radiation,base.group_user,1,0,0,0
-access_sparks_solar_radiation_manager,sparks.solar.radiation.manager,model_sparks.solar_radiation,sales_team.group_sale_manager,1,1,1,1
+access_sparks_solar_radiation_manager,sparks.solar.radiation.manager,model_sparks_solar_radiation,sales_team.group_sale_manager,1,1,1,1
 access_sparks_solar_radiation_month_user,sparks.solar.radiation.month.user,model_sparks_solar_radiation_month,base.group_user,1,1,1,1
 access_sparks_solar_kit_capacity_user,sparks.solar.kit.capacity.user,model_sparks_solar_kit_capacity,base.group_user,1,0,0,0
 access_sparks_solar_kit_capacity_manager,sparks.solar.kit.capacity.manager,model_sparks_solar_kit_capacity,sales_team.group_sale_manager,1,1,1,1
