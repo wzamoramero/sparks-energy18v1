@@ -105,6 +105,19 @@ class SolarQuotation(models.Model):
     system_efficiency = fields.Float(string='System Efficiency (%)', default=85.0)
     
     # Financial Information
+    subtotal_investment = fields.Monetary(
+        string='Subtotal Investment',
+        compute='_compute_financial_data',
+        store=True,
+        currency_field='currency_id'
+    )
+    tax_rate = fields.Float(string='Tax Rate (%)', default=12.0)
+    tax_amount = fields.Monetary(
+        string='Tax Amount',
+        compute='_compute_financial_data',
+        store=True,
+        currency_field='currency_id'
+    )
     total_investment = fields.Monetary(
         string='Total Investment',
         compute='_compute_financial_data',
@@ -149,6 +162,13 @@ class SolarQuotation(models.Model):
     coverage_percentage = fields.Float(
         string='Energy Coverage (%)',
         compute='_compute_energy_production',
+        store=True
+    )
+    
+    # Solar radiation field
+    annual_solar_radiation = fields.Float(
+        string='Annual Solar Radiation (kWh/m²)',
+        related='city_id.total_radiation_adjusted',
         store=True
     )
     
@@ -228,6 +248,13 @@ class SolarQuotation(models.Model):
                 if cities:
                     record.city_id = cities[0]
 
+    @api.onchange('city_id')
+    def _onchange_city_id(self):
+        """Validate city selection based on installation location"""
+        if self.city_id and self.installation_address:
+            # You can add validation logic here if needed
+            pass
+
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
         """Reset meters when customer changes"""
@@ -292,7 +319,7 @@ class SolarQuotation(models.Model):
         for record in self:
             if record.total_annual_consumption and record.city_id:
                 # Calculate required system power based on consumption and solar radiation
-                annual_radiation = record.city_id.total_radiation_adjusted
+                annual_radiation = record.city_id.total_radiation_adjusted or record.city_id.total_radiation
                 if annual_radiation > 0:
                     # System power calculation considering efficiency losses
                     efficiency_factor = record.system_efficiency / 100.0
@@ -301,29 +328,41 @@ class SolarQuotation(models.Model):
                         (annual_radiation * efficiency_factor)
                     )
                     
-                    # Calculate number of panels
-                    if record.panel_power_wp > 0:
+                    # Calculate number of panels and actual system power
+                    if record.selected_panel_id and record.panel_power_wp > 0:
                         record.panel_quantity = int(
                             (record.system_power_kw * 1000) / record.panel_power_wp
                         ) + 1  # Round up
+                        
+                        # Calculate actual system power based on panel quantity
+                        record.actual_system_power_kw = (record.panel_quantity * record.panel_power_wp) / 1000
+                        
+                        # Calculate total panel area
+                        record.total_panel_area_m2 = record.panel_quantity * (record.panel_area_m2 or 0)
                     else:
                         record.panel_quantity = 0
+                        record.actual_system_power_kw = record.system_power_kw
+                        record.total_panel_area_m2 = 0.0
                 else:
                     record.system_power_kw = 0.0
                     record.panel_quantity = 0
+                    record.actual_system_power_kw = 0.0
+                    record.total_panel_area_m2 = 0.0
             else:
                 record.system_power_kw = 0.0
                 record.panel_quantity = 0
+                record.actual_system_power_kw = 0.0
+                record.total_panel_area_m2 = 0.0
 
-    @api.depends('system_power_kw', 'city_id', 'system_efficiency')
+    @api.depends('actual_system_power_kw', 'city_id', 'system_efficiency')
     def _compute_energy_production(self):
         for record in self:
-            if record.system_power_kw and record.city_id:
-                annual_radiation = record.city_id.total_radiation_adjusted
+            if record.actual_system_power_kw and record.city_id:
+                annual_radiation = record.city_id.total_radiation_adjusted or record.city_id.total_radiation
                 efficiency_factor = record.system_efficiency / 100.0
                 
                 record.estimated_annual_production = (
-                    record.system_power_kw * annual_radiation * efficiency_factor
+                    record.actual_system_power_kw * annual_radiation * efficiency_factor
                 )
                 
                 if record.total_annual_consumption > 0:
@@ -337,20 +376,23 @@ class SolarQuotation(models.Model):
                 record.estimated_annual_production = 0.0
                 record.coverage_percentage = 0.0
 
-    @api.depends('system_power_kw', 'estimated_annual_production')
+    @api.depends('actual_system_power_kw', 'estimated_annual_production', 'tax_rate')
     def _compute_financial_data(self):
         for record in self:
-            if record.system_power_kw:
+            if record.actual_system_power_kw:
                 # Get cost per kW from solar kit data (simplified)
                 cost_per_kw = 1200.0  # Default cost per kW USD
                 solar_kit = self.env['sparks.solar.kit.detail'].search([
-                    ('power_capacity_id.power', '>=', record.system_power_kw)
+                    ('power_capacity_id.power', '>=', record.actual_system_power_kw)
                 ], limit=1, order='power_capacity_id.power asc')
                 
                 if solar_kit:
                     cost_per_kw = solar_kit.cost_per_kw
                 
-                record.total_investment = record.system_power_kw * cost_per_kw
+                # Calculate subtotal and total with taxes
+                record.subtotal_investment = record.actual_system_power_kw * cost_per_kw
+                record.tax_amount = record.subtotal_investment * (record.tax_rate / 100)
+                record.total_investment = record.subtotal_investment + record.tax_amount
                 
                 # Calculate monthly savings based on energy production
                 if record.estimated_annual_production:
@@ -376,6 +418,8 @@ class SolarQuotation(models.Model):
                     record.monthly_savings = 0.0
                     record.payback_period_years = 0.0
             else:
+                record.subtotal_investment = 0.0
+                record.tax_amount = 0.0
                 record.total_investment = 0.0
                 record.monthly_savings = 0.0
                 record.payback_period_years = 0.0
