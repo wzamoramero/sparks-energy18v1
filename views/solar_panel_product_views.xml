@@ -6,6 +6,7 @@
         <record id="view_solar_panel_product_form" model="ir.ui.view">
             <field name="name">sparks.solar.panel.product.form</field>
             <field name="model">sparks.solar.panel.product</field>
+            <field name="type">form</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <form string="Solar Panel Product">
                     <sheet>
@@ -91,9 +92,10 @@
         <record id="view_solar_panel_product_tree" model="ir.ui.view">
             <field name="name">sparks.solar.panel.product.tree</field>
             <field name="model">sparks.solar.panel.product</field>
+            <field name="type">list</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="arch" type="xml">
-                <tree string="Solar Panel Products" decoration-success="is_preferred" 
-                      decoration-muted="not active">
+                <list string="Solar Panel Products" decoration-success="is_preferred" 
+                      decoration-muted="not active">  <!-- ✅ CAMBIO: <tree> → <list> -->
                     <field name="manufacturer"/>
                     <field name="name"/>
                     <field name="power_wp"/>
@@ -104,7 +106,7 @@
                     <field name="unit_cost" optional="show"/>
                     <field name="is_preferred" widget="boolean_toggle"/>
                     <field name="active" widget="boolean_toggle"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -112,6 +114,7 @@
         <record id="view_solar_panel_product_kanban" model="ir.ui.view">
             <field name="name">sparks.solar.panel.product.kanban</field>
             <field name="model">sparks.solar.panel.product</field>
+            <field name="type">kanban</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <kanban default_group_by="technology" class="o_kanban_small_column">
                     <field name="name"/>
@@ -162,6 +165,7 @@
         <record id="view_solar_panel_product_search" model="ir.ui.view">
             <field name="name">sparks.solar.panel.product.search</field>
             <field name="model">sparks.solar.panel.product</field>
+            <field name="type">search</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <search string="Solar Panel Products">
                     <field name="name" string="Panel Model"/>
@@ -210,7 +214,7 @@
         <record id="action_solar_panel_product" model="ir.actions.act_window">
             <field name="name">Solar Panel Catalog</field>
             <field name="res_model">sparks.solar.panel.product</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="context">{'search_default_active': 1}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
