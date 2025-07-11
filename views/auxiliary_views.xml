@@ -6,6 +6,7 @@
         <record id="view_solar_radiation_form" model="ir.ui.view">
             <field name="name">sparks.solar.radiation.form</field>
             <field name="model">sparks.solar.radiation</field>
+            <field name="type">form</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <form string="Solar Radiation Record">
                     <sheet>
@@ -30,14 +31,15 @@
                         
                         <notebook>
                             <page string="Monthly Radiation Data" name="monthly_data">
+                                <!-- ✅ CORREGIDO: Cambiar <tree> por <list> -->
                                 <field name="radiation_line_ids">
-                                    <tree editable="bottom">
+                                    <list editable="bottom">
                                         <field name="month"/>
                                         <field name="radiation"/>
                                         <field name="days_in_month" readonly="1"/>
                                         <field name="radiation_adjusted" readonly="1"/>
                                         <field name="monthly_total" readonly="1"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>
@@ -49,8 +51,9 @@
         <record id="view_solar_radiation_tree" model="ir.ui.view">
             <field name="name">sparks.solar.radiation.tree</field>
             <field name="model">sparks.solar.radiation</field>
+            <field name="type">list</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="arch" type="xml">
-                <tree string="Solar Radiation Records">
+                <list string="Solar Radiation Records">  <!-- ✅ CAMBIO: <tree> → <list> -->
                     <field name="name"/>
                     <field name="city"/>
                     <field name="state_id"/>
@@ -58,20 +61,21 @@
                     <field name="year"/>
                     <field name="average_radiation"/>
                     <field name="average_radiation_adjusted"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_solar_radiation" model="ir.actions.act_window">
             <field name="name">Solar Radiation Data</field>
             <field name="res_model">sparks.solar.radiation</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>  <!-- ✅ CAMBIO: tree → list -->
         </record>
 
         <!-- Energy Projection Views -->
         <record id="view_energy_projection_form" model="ir.ui.view">
             <field name="name">sparks.energy.projection.form</field>
             <field name="model">sparks.energy.projection</field>
+            <field name="type">form</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <form string="Energy Price Projection">
                     <sheet>
@@ -95,28 +99,30 @@
         <record id="view_energy_projection_tree" model="ir.ui.view">
             <field name="name">sparks.energy.projection.tree</field>
             <field name="model">sparks.energy.projection</field>
+            <field name="type">list</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="arch" type="xml">
-                <tree string="Energy Price Projections" editable="top">
+                <list string="Energy Price Projections" editable="top">  <!-- ✅ CAMBIO: <tree> → <list> -->
                     <field name="name"/>
                     <field name="actual_price"/>
                     <field name="projected_price"/>
                     <field name="inflation_rate"/>
                     <field name="status"/>
                     <field name="calculation_allowed"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_energy_projection" model="ir.actions.act_window">
             <field name="name">Energy Price Projections</field>
             <field name="res_model">sparks.energy.projection</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>  <!-- ✅ CAMBIO: tree → list -->
         </record>
 
         <!-- Solar Kit Capacity Views -->
         <record id="view_solar_kit_capacity_form" model="ir.ui.view">
             <field name="name">sparks.solar.kit.capacity.form</field>
             <field name="model">sparks.solar.kit.capacity</field>
+            <field name="type">form</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <form string="Solar Kit Power Capacity">
                     <sheet>
@@ -134,26 +140,28 @@
         <record id="view_solar_kit_capacity_tree" model="ir.ui.view">
             <field name="name">sparks.solar.kit.capacity.tree</field>
             <field name="model">sparks.solar.kit.capacity</field>
+            <field name="type">list</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="arch" type="xml">
-                <tree string="Solar Kit Power Capacities" editable="top">
+                <list string="Solar Kit Power Capacities" editable="top">  <!-- ✅ CAMBIO: <tree> → <list> -->
                     <field name="name"/>
                     <field name="power"/>
                     <field name="recommended_usage"/>
                     <field name="active"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_solar_kit_capacity" model="ir.actions.act_window">
             <field name="name">Solar Kit Power Capacities</field>
             <field name="res_model">sparks.solar.kit.capacity</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>  <!-- ✅ CAMBIO: tree → list -->
         </record>
 
         <!-- Solar Kit Reference Cost Views -->
         <record id="view_solar_kit_reference_form" model="ir.ui.view">
             <field name="name">sparks.solar.kit.reference.form</field>
             <field name="model">sparks.solar.kit.reference</field>
+            <field name="type">form</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <form string="Solar Kit Reference Cost">
                     <sheet>
@@ -170,8 +178,9 @@
                         
                         <notebook>
                             <page string="Cost Details by Capacity" name="cost_details">
+                                <!-- ✅ CORREGIDO: Cambiar <tree> por <list> -->
                                 <field name="detail_line_ids">
-                                    <tree editable="bottom">
+                                    <list editable="bottom">
                                         <field name="power_capacity_id"/>
                                         <field name="equipment_cost"/>
                                         <field name="installation_cost"/>
@@ -179,7 +188,7 @@
                                         <field name="other_costs"/>
                                         <field name="total_cost" readonly="1"/>
                                         <field name="cost_per_kw" readonly="1"/>
-                                    </tree>
+                                    </list>
                                     <form>
                                         <group>
                                             <group>
@@ -206,28 +215,30 @@
         <record id="view_solar_kit_reference_tree" model="ir.ui.view">
             <field name="name">sparks.solar.kit.reference.tree</field>
             <field name="model">sparks.solar.kit.reference</field>
+            <field name="type">list</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="arch" type="xml">
-                <tree string="Solar Kit Reference Costs">
+                <list string="Solar Kit Reference Costs">  <!-- ✅ CAMBIO: <tree> → <list> -->
                     <field name="name"/>
                     <field name="year"/>
                     <field name="currency_id"/>
                     <field name="active"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_solar_kit_reference" model="ir.actions.act_window">
             <field name="name">Solar Kit Reference Costs</field>
             <field name="res_model">sparks.solar.kit.reference</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>  <!-- ✅ CAMBIO: tree → list -->
         </record>
 
         <!-- Solar Kit Detail Views -->
         <record id="view_solar_kit_detail_tree" model="ir.ui.view">
             <field name="name">sparks.solar.kit.detail.tree</field>
             <field name="model">sparks.solar.kit.detail</field>
+            <field name="type">list</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="arch" type="xml">
-                <tree string="Solar Kit Cost Details">
+                <list string="Solar Kit Cost Details">  <!-- ✅ CAMBIO: <tree> → <list> -->
                     <field name="reference_id"/>
                     <field name="power_capacity_id"/>
                     <field name="equipment_cost"/>
@@ -236,36 +247,37 @@
                     <field name="other_costs"/>
                     <field name="total_cost"/>
                     <field name="cost_per_kw"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_solar_kit_detail" model="ir.actions.act_window">
             <field name="name">Solar Kit Cost Details</field>
             <field name="res_model">sparks.solar.kit.detail</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>  <!-- ✅ CAMBIO: tree → list -->
         </record>
 
         <!-- Monthly Radiation Views -->
         <record id="view_solar_radiation_month_tree" model="ir.ui.view">
             <field name="name">sparks.solar.radiation.month.tree</field>
             <field name="model">sparks.solar.radiation.month</field>
+            <field name="type">list</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="arch" type="xml">
-                <tree string="Monthly Solar Radiation Data">
+                <list string="Monthly Solar Radiation Data">  <!-- ✅ CAMBIO: <tree> → <list> -->
                     <field name="radiation_id"/>
                     <field name="month"/>
                     <field name="radiation"/>
                     <field name="days_in_month"/>
                     <field name="radiation_adjusted"/>
                     <field name="monthly_total"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_solar_radiation_month" model="ir.actions.act_window">
             <field name="name">Monthly Solar Radiation</field>
             <field name="res_model">sparks.solar.radiation.month</field>
-            <field name="view_mode">tree</field>
+            <field name="view_mode">list</field>  <!-- ✅ CAMBIO: tree → list -->
         </record>
 
     </data>
