@@ -19,6 +19,12 @@
                   parent="menu_sparks_quotations" 
                   action="action_solar_quotation" 
                   sequence="10"/>
+				  
+		<menuitem id="menu_energy_meters" 
+                  name="Energy Meters" 
+                  parent="menu_sparks_quotations" 
+                  action="action_energy_meter" 
+                  sequence="15"/>
 
         <menuitem id="menu_consumption_data" 
                   name="Consumption Data" 
@@ -73,6 +79,13 @@
                   parent="menu_solar_kit_config" 
                   action="action_solar_kit_detail" 
                   sequence="30"/>
+        
+        <menuitem id="menu_solar_customers" 
+                name="Solar Customers" 
+                parent="menu_sparks_quotations" 
+                action="action_customer_solar_quotations" 
+                sequence="30"/>
+                
 
         <!-- Reports Menu -->
         <menuitem id="menu_sparks_reports" 
