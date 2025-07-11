@@ -87,10 +87,14 @@ class EnergyMeter(models.Model):
         'quotation_id',
         string='Solar Quotations'
     )
+    
     quotation_count = fields.Integer(
         string='Quotations Count',
-        compute='_compute_quotation_count'
+        compute='_compute_quotation_count',
+        store=True,  # ✅ AGREGADO: Almacenar en BD para que sea buscable
+        search='_search_quotation_count'  # ✅ AGREGADO: Hacer buscable
     )
+    
     
     # Computed Statistics
     average_monthly_consumption = fields.Float(
@@ -245,6 +249,32 @@ class EnergyMeter(models.Model):
             }
         }
 
+    def _search_quotation_count(self, operator, value):
+        """Search method for quotation_count field"""
+        # Buscar metros que tengan quotations
+        if operator == '>' and value == 0:
+            return [('quotation_ids', '!=', False)]
+        elif operator == '=' and value == 0:
+            return [('quotation_ids', '=', False)]
+        else:
+            # Para otros casos, usar la cuenta real
+            meters = self.search([])
+            meter_ids = []
+            for meter in meters:
+                count = len(meter.quotation_ids)
+                if operator == '=' and count == value:
+                    meter_ids.append(meter.id)
+                elif operator == '>' and count > value:
+                    meter_ids.append(meter.id)
+                elif operator == '<' and count < value:
+                    meter_ids.append(meter.id)
+                elif operator == '>=' and count >= value:
+                    meter_ids.append(meter.id)
+                elif operator == '<=' and count <= value:
+                    meter_ids.append(meter.id)
+                elif operator == '!=' and count != value:
+                    meter_ids.append(meter.id)
+            return [('id', 'in', meter_ids)]
 
 class MeterConsumption(models.Model):
     _name = 'sparks.meter.consumption'
