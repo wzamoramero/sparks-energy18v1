@@ -6,6 +6,7 @@
         <record id="view_energy_meter_form" model="ir.ui.view">
             <field name="name">sparks.energy.meter.form</field>
             <field name="model">sparks.energy.meter</field>
+            <field name="type">form</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <form string="Energy Meter">
                     <header>
@@ -79,8 +80,9 @@
                             </page>
                             
                             <page string="Historical Consumption" name="consumption">
+                                <!-- ✅ CORREGIDO: Cambiar <tree> por <list> -->
                                 <field name="consumption_line_ids">
-                                    <tree editable="bottom" default_order="year desc, month desc">
+                                    <list editable="bottom" default_order="year desc, month desc">
                                         <field name="year"/>
                                         <field name="month"/>
                                         <field name="energy_kwh"/>
@@ -88,7 +90,7 @@
                                         <field name="max_demand_kw" optional="hide"/>
                                         <field name="bill_number" optional="hide"/>
                                         <field name="bill_date" optional="hide"/>
-                                    </tree>
+                                    </list>
                                     <form>
                                         <group>
                                             <group>
@@ -121,13 +123,13 @@
                             <page string="Solar Quotations" name="quotations" 
                                   invisible="quotation_count == 0">
                                 <field name="quotation_ids">
-                                    <tree>
+                                    <list>  <!-- ✅ CAMBIO: <tree> → <list> -->
                                         <field name="name"/>
                                         <field name="quotation_date"/>
                                         <field name="system_power_kw"/>
                                         <field name="total_investment"/>
                                         <field name="state" widget="badge"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>
@@ -150,9 +152,10 @@
         <record id="view_energy_meter_tree" model="ir.ui.view">
             <field name="name">sparks.energy.meter.tree</field>
             <field name="model">sparks.energy.meter</field>
+            <field name="type">list</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="arch" type="xml">
-                <tree string="Energy Meters" decoration-muted="status=='inactive'" 
-                      decoration-danger="status=='disconnected'">
+                <list string="Energy Meters" decoration-muted="status=='inactive'" 
+                      decoration-danger="status=='disconnected'">  <!-- ✅ CAMBIO: <tree> → <list> -->
                     <field name="name"/>
                     <field name="supply_number"/>
                     <field name="partner_id"/>
@@ -166,7 +169,7 @@
                            decoration-danger="status=='disconnected'"
                            decoration-muted="status=='inactive'"/>
                     <field name="installation_date" optional="hide"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -174,6 +177,7 @@
         <record id="view_energy_meter_kanban" model="ir.ui.view">
             <field name="name">sparks.energy.meter.kanban</field>
             <field name="model">sparks.energy.meter</field>
+            <field name="type">kanban</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <kanban default_group_by="status" class="o_kanban_small_column">
                     <field name="name"/>
@@ -220,6 +224,7 @@
         <record id="view_energy_meter_search" model="ir.ui.view">
             <field name="name">sparks.energy.meter.search</field>
             <field name="model">sparks.energy.meter</field>
+            <field name="type">search</field>  <!-- ✅ AGREGADO: type explícito -->
             <field name="arch" type="xml">
                 <search string="Energy Meters">
                     <field name="name" string="Meter Code"/>
@@ -266,9 +271,10 @@
         <record id="view_meter_consumption_tree" model="ir.ui.view">
             <field name="name">sparks.meter.consumption.tree</field>
             <field name="model">sparks.meter.consumption</field>
+            <field name="type">list</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="arch" type="xml">
-                <tree string="Meter Consumption History" editable="top" 
-                      default_order="year desc, month desc">
+                <list string="Meter Consumption History" editable="top" 
+                      default_order="year desc, month desc">  <!-- ✅ CAMBIO: <tree> → <list> -->
                     <field name="meter_id"/>
                     <field name="year"/>
                     <field name="month"/>
@@ -278,7 +284,7 @@
                     <field name="power_factor" optional="hide"/>
                     <field name="bill_number" optional="hide"/>
                     <field name="bill_date" optional="hide"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -286,7 +292,7 @@
         <record id="action_energy_meter" model="ir.actions.act_window">
             <field name="name">Energy Meters</field>
             <field name="res_model">sparks.energy.meter</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="context">{'search_default_active': 1}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
@@ -302,7 +308,7 @@
         <record id="action_meter_consumption" model="ir.actions.act_window">
             <field name="name">Meter Consumption History</field>
             <field name="res_model">sparks.meter.consumption</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>  <!-- ✅ CAMBIO: tree → list -->
         </record>
 
     </data>
