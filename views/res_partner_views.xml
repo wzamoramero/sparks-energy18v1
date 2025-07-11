@@ -62,29 +62,31 @@
                         
                         <notebook>
                             <page string="Energy Meters" name="meters">
+                                <!-- ✅ CORREGIDO: Cambiar <tree> por <list> -->
                                 <field name="energy_meter_ids">
-                                    <tree>
+                                    <list>
                                         <field name="name"/>
-                                        <field name="supply_number"/>
+                                        <field name="supply_number"/>  <!-- ✅ Este campo SÍ existe en sparks.energy.meter -->
                                         <field name="installation_address"/>
                                         <field name="meter_type"/>
                                         <field name="average_monthly_consumption"/>
                                         <field name="status" widget="badge"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             
                             <page string="Solar Quotations" name="quotations">
+                                <!-- ✅ CORREGIDO: Cambiar <tree> por <list> y corregir campo -->
                                 <field name="solar_quotation_ids">
-                                    <tree>
+                                    <list>
                                         <field name="name"/>
                                         <field name="quotation_date"/>
-                                        <field name="meter_id"/>
+                                        <field name="meter_count"/>  <!-- ✅ CORREGIDO: meter_id → meter_count -->
                                         <field name="city_id"/>
                                         <field name="system_power_kw"/>
                                         <field name="total_investment"/>
                                         <field name="state" widget="badge"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>
@@ -97,17 +99,18 @@
         <record id="action_customer_solar_quotations" model="ir.actions.act_window">
             <field name="name">Solar Energy Customers</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>  <!-- ✅ CAMBIO: tree → list -->
             <field name="domain">[('solar_quotation_count', '>', 0)]</field>
             <field name="context">{'search_default_customer': 1}</field>
         </record>
 
-        <!-- Add menu item for solar customers -->
+        <!-- COMENTADO: El menú se creará en menu_views.xml
         <menuitem id="menu_solar_customers" 
                   name="Solar Customers" 
                   parent="menu_sparks_quotations" 
                   action="action_customer_solar_quotations" 
                   sequence="30"/>
+        -->
 
     </data>
 </odoo>
